@@ -3,7 +3,8 @@ zMors modular synthesizer on teensy 3.6
 
 this is an arduino scatch with an modular synthsizer
 see here how it works:
-https://www.youtube.com/watch?v=jRED831GkwU
+[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/jRED831GkwU/0.jpg)](https://www.youtube.com/watch?v=jRED831GkwU)
+
 
 Using:
 - red lines are presets
