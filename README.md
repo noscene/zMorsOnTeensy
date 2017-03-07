@@ -1,7 +1,7 @@
 # zMorsOnTeensy
 zMors modular synthesizer on teensy 3.6
 
-this is an arduino skatch with an modular synthesizer
+this is an arduino sketch with an modular synthesizer
 see here how it works:
 [![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/jRED831GkwU/0.jpg)](https://www.youtube.com/watch?v=jRED831GkwU)
 
