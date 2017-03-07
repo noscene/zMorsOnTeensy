@@ -20,9 +20,9 @@ class zmModuleFilter : public zmModule {
       portName[PORT_FILTER_Q]   = "res";
 
       parameterName[0]       = "frq";
-      parameterMap[0]        = 0.5;
+      parameterDefaults[0]        = 0.5;
       parameterName[1]       = "res";
-      parameterMap[1]        = 0.5;
+      parameterDefaults[1]        = 0.5;
       
     }
     void genSample(float * bus) {

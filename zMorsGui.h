@@ -61,6 +61,8 @@ class zMorsGuiLine {
           switch(preset){
               case 0:   ae->patch1();  break;
               case 1:   ae->patch2();  break;
+              case 2:   ae->patch3();  break;
+              case 3:   ae->patch4();  break;
             }
       }
     };
@@ -87,7 +89,8 @@ class zMorsGui {
     Adafruit_SSD1331 * display;
   public:
     int topLine = 0;
-    zMorsGuiLine lines[100];
+    int maxLine = 0;
+    zMorsGuiLine lines[160];
 
     zMorsGui() {
       display =  new Adafruit_SSD1331(cs, dc, rst);
@@ -104,7 +107,7 @@ class zMorsGui {
     void renderLines() {
       display->fillRect2(0, 0, 128, 64, BLACK);
       display->setTextColor(WHITE);
-      topLine = RANGE(0, topLine, 62);
+      topLine = RANGE(0, topLine, maxLine);
       int y = 0;
       for (int p = topLine ; p < topLine + 7 ; p++) {
         display->setCursor(0, y);
@@ -131,6 +134,19 @@ class zMorsGui {
        lines[idx].ae = ae;
        idx++;
 
+       lines[idx].color = RED;
+       lines[idx].text = "Patch Kick";
+       lines[idx].type = zMorsGuiLine::PRESET;
+       lines[idx].preset = 2;
+       lines[idx].ae = ae;
+       idx++;
+
+       lines[idx].color = RED;
+       lines[idx].text = "FM  Test";
+       lines[idx].type = zMorsGuiLine::PRESET;
+       lines[idx].preset = 3;
+       lines[idx].ae = ae;
+       idx++;
       
       for (int i = 0 ; i < 10 ; i++) {
         if (ae->modules[i] != NULL) {
@@ -163,6 +179,7 @@ class zMorsGui {
           }
         }
       }
+      maxLine = idx-1;
     };
 
 };

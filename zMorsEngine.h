@@ -8,15 +8,11 @@
 #include "zmModuleVCA.h"
 #include "zmModuleMIX.h"
 
-// #define Osc1_POut
-
-
-
 class zMorsEngine {
 
   public:
     float       bus[BUS_COUNT];
-    zmModule *  modules[10] = {NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
+    zmModule *  modules[20] = {NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
 
     zmModuleIn      * mIN  ;
     zmModuleOsc     * mOsc1 ;
@@ -32,6 +28,7 @@ class zMorsEngine {
   public:
     zMorsEngine() {
 
+      // create engine
       mIN     = new zmModuleIn();
       mOsc1   = new zmModuleOsc();
       mOsc2   = new zmModuleOsc();
@@ -57,13 +54,15 @@ class zMorsEngine {
       modules[8] = mSeq;
       modules[9] = mOut;
 
-      patch2();
+      resetModules();
+      patch4();
     };
 
     void resetModules(){
       for(int i =0 ; i< 10 ; i++){
          modules[i]->resetModule();       
       }  
+      // todo reset parms too!!
     }
     
     void patch1() {
@@ -120,7 +119,46 @@ class zMorsEngine {
       mSeq->parameterMap[7] = 0.8;
       
     };
+
+
+    void patch3() {
+      // HiHats Seq
+      // Patch CV Sequencer
+      // Patch CV Sequencer
+      mOsc1->portMap[PORT_OSC_OUT_SIN]    = mOut->portMap[PORT_OUT_L] = 1;
+      mOsc2->portMap[PORT_OSC_OUT_SQR]    = mSeq->portMap[PORT_SEQ_CLK] =  mEnv1 ->portMap[PORT_AD_TR] = 3;
+      mEnv1->portMap[PORT_AD_OUT]         = mOsc1->portMap[PORT_OSC_FRQ] = mOsc1->portMap[PORT_OSC_AMP] = 4;
+
+      // Connect AD env and set osc amp to 0 (add by env)
+      mSeq->portMap[PORT_SEQ_OUT]  =0;
+      mOsc1->parameterMap[0] = 0.0020;    // frq
+      mOsc1->parameterMap[1] = 1.0;       // amp
+      mOsc1->parameterMap[3] = 0.016;       // fm deep
+      mOsc2->parameterMap[0] = 0.00005;
+      mEnv1->parameterMap[0] = 0.000001;
+      mEnv1->parameterMap[1] = 0.48;
+      
+    };
+
+    void patch4() {
+      // FM Tester
+      
+      mOsc1->portMap[PORT_OSC_OUT_SIN]    = mOut->portMap[PORT_OUT_L] = 1;
+      mOsc2->portMap[PORT_OSC_OUT_SIN]    = mOsc1->portMap[PORT_OSC_FRQ] = 2;
+//      mEnv1->portMap[PORT_AD_OUT]         = mOsc1->portMap[PORT_OSC_FRQ] = mOsc1->portMap[PORT_OSC_AMP] = 4;
+
+      // Connect AD env and set osc amp to 0 (add by env)
+      mSeq->portMap[PORT_SEQ_OUT]  =0;
+      mOsc1->parameterMap[0] = 0.0020;    // frq
+      mOsc1->parameterMap[1] = 1.0;       // amp
+      mOsc1->parameterMap[3] = 0.016;       // fm deep
+      mOsc2->parameterMap[0] = 0.00005;
+      mEnv1->parameterMap[0] = 0.000001;
+      mEnv1->parameterMap[1] = 0.48;
+      
+    };
     
+    // Render all Modules
     void loop() {
       for (int i = 0 ; i < 10 ; i ++) {
         if (modules[i] == NULL) {
@@ -132,6 +170,7 @@ class zMorsEngine {
     };
 
 
+    // compute lineCount
     int lineCount() {
       int cnt = 0;
       for (int i = 0 ; i < 10 ; i++) {

@@ -7,9 +7,6 @@
 #define BUS_COUNT 32
 
 
-
-
-
 #define RANGE(vmin,v,vmax)  ( (isnan(v)) ? 0.0 :   min(max(v,vmin),vmax) )
 
 /******************************************************/
@@ -19,8 +16,9 @@ class zmModule {
 
     float sampleRate = 40000.0;
 
-    unsigned int   portMap[10]            = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    float          parameterMap[10]       = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    unsigned int   portMap[10]                 = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    float          parameterMap[10]            = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    float          parameterDefaults[10]       = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
     String         parameterName[10];
     String         portName[10];
     String         title                  = "unKnown";
@@ -52,6 +50,9 @@ class zmModule {
       for (int i = 0 ; i < 10 ; i++) {
         portMap[i]=0;
       }
+      for (int i = 0 ; i < 10 ; i++) {
+        parameterMap[i]=parameterDefaults[i];
+      }
     };
 
     int lineCount() {
@@ -75,7 +76,7 @@ class zmModuleNoise : public zmModule {
       portName[PORT_NOISE_OUT] = "out";
       portName[PORT_NOISE_AMP] = "amp";
       parameterName[0]       = "level";
-      parameterMap[0]        = 0.5;
+      parameterDefaults[0]        = 0.5;
     }
 
     void genSample(float * bus) {
@@ -103,9 +104,9 @@ class zmModuleAD : public zmModule {
       portName[PORT_AD_OUT] = "out";
       portName[PORT_AD_TR]     = "tr";
       parameterName[0]         = "attack";
-      parameterMap[0]          = 0.5;
+      parameterDefaults[0]          = 0.5;
       parameterName[1]         = "release";
-      parameterMap[1]          = 0.5;
+      parameterDefaults[1]          = 0.5;
     }
 
     void genSample(float * bus) {
@@ -148,21 +149,21 @@ class zmModuleSeq : public zmModule {
       portName[PORT_SEQ_CLK] = "clk";
 
       parameterName[0]       = "#1";
-      parameterMap[0]        = 0.1;
+      parameterDefaults[0]        = 0.1;
       parameterName[1]       = "#2";
-      parameterMap[1]        = 0.1;
+      parameterDefaults[1]        = 0.1;
       parameterName[2]       = "#3";
-      parameterMap[2]        = 0.1;
+      parameterDefaults[2]        = 0.1;
       parameterName[3]       = "#4";
-      parameterMap[3]        = 0.1;
+      parameterDefaults[3]        = 0.1;
       parameterName[4]       = "#5";
-      parameterMap[4]        = 0.1;
+      parameterDefaults[4]        = 0.1;
       parameterName[5]       = "#6";
-      parameterMap[5]        = 0.1;
+      parameterDefaults[5]        = 0.1;
       parameterName[6]       = "#7";
-      parameterMap[6]        = 0.1;
+      parameterDefaults[6]        = 0.1;
       parameterName[7]       = "#8";
-      parameterMap[7]        = 0.1;
+      parameterDefaults[7]        = 0.1;
     }
 
     unsigned int idx = 0;
@@ -210,17 +211,18 @@ class zmModuleOsc : public zmModule {
       portName[PORT_OSC_FRQ]     = "frq";
       portName[PORT_OSC_AMP]     = "amp";
       parameterName[0]           = "thea";
-      parameterMap[0]            = 0.005;
+      parameterDefaults[0]            = 0.005;
       parameterName[1]           = "level";
-      parameterMap[1]            = 1.0;
+      parameterDefaults[1]            = 1.0;
       parameterName[2]           = "pw";
-      parameterMap[2]            = 0.5;
+      parameterDefaults[2]            = 0.5;
+      parameterName[3]           = "fm_deep";
+      parameterDefaults[3]            = 0.5;
       thea = 0;
-
     }
 
     void genSample(float * bus) {
-      thea += parameterMap[0] + bus[portMap[PORT_OSC_FRQ]] ;
+      thea += (parameterMap[0] ) + bus[portMap[PORT_OSC_FRQ]] * parameterMap[3];
 
       if (thea < -1.0) {
         thea = -1.0;
@@ -247,7 +249,7 @@ class zmModuleOsc : public zmModule {
       if (portMap[PORT_OSC_OUT_SIN]) {
         // sin out
         float x = thea  * M_PI;
-        bus[portMap[PORT_OSC_OUT_SIN]] =  B * x + C * x * fabs(x);
+        bus[portMap[PORT_OSC_OUT_SIN]] = ( B * x + C * x * fabs(x) ) * (parameterMap[1] + bus[portMap[PORT_OSC_AMP]]) ;
         bus[0] = 0.0;
       }
 
