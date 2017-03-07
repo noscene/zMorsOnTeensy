@@ -1,7 +1,7 @@
 # zMorsOnTeensy
 zMors modular synthesizer on teensy 3.6
 
-this is an arduino scatch with an modular synthsizer
+this is an arduino skatch with an modular synthesizer
 see here how it works:
 [![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/jRED831GkwU/0.jpg)](https://www.youtube.com/watch?v=jRED831GkwU)
 
@@ -9,7 +9,7 @@ see here how it works:
 Using:
 - red lines are presets
 - yellow lines are module titles
-- blue lines are connection points (select up to 32 buses to make connections between the modules)
+- blue lines are connection points (select one of 32 buses to make connections between the modules)
 - green lines are module parameters (0.0 ..... 1.0)
 
 Current Setup contains
@@ -22,4 +22,9 @@ Current Setup contains
 - 4 analog in
 - 2 analog out
 
-
+Roadmap
+- performance adc
+- tune osc
+- improve ui
+- add eagle files
+- add presets
