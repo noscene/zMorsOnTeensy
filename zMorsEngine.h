@@ -2,6 +2,9 @@
 #ifndef zMorsEngine_h
 #define zMorsEngine_h
 
+#include <ArduinoJson.h>
+
+
 #include "Arduino.h"
 #include "zmModule.h"
 #include "zmModuleFilter.h"
@@ -38,7 +41,7 @@ class zMorsEngine {
       mVCA    = new zmModuleVCA();
       mSeq    = new zmModuleSeq();
       mOut    = new zmModuleOut();
-      mEnv1    = new zmModuleAD();
+      mEnv1   = new zmModuleAD();
 
       // wishlist
       // 3. osc
@@ -71,7 +74,6 @@ class zMorsEngine {
       for(int i =0 ; i< 10 ; i++){
          modules[i]->resetModule();       
       }  
-      // todo reset parms too!!
     }
     
     void patch1() {
@@ -166,6 +168,26 @@ class zMorsEngine {
       mEnv1->parameterMap[1] = 0.48;
       
     };
+
+
+
+    String patch2Json(){
+      
+      StaticJsonBuffer<200> jsonBuffer;
+      
+      JsonObject& root = jsonBuffer.createObject();
+      root["version"] = 1.0;
+      JsonArray& data = root.createNestedArray("modules");
+      data.add()
+
+      
+      
+    };
+
+
+
+
+
     
     // Render all Modules
     void loop() {

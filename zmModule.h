@@ -46,12 +46,12 @@ class zmModule {
       return 10;
     }
 
-    void resetModule(){
+    void resetModule() {
       for (int i = 0 ; i < 10 ; i++) {
-        portMap[i]=0;
+        portMap[i] = 0;
       }
       for (int i = 0 ; i < 10 ; i++) {
-        parameterMap[i]=parameterDefaults[i];
+        parameterMap[i] = parameterDefaults[i];
       }
     };
 
@@ -120,11 +120,20 @@ class zmModuleAD : public zmModule {
 
       if (attack_state) {
         last_out *=  1.0 +   (1.0 - parameterMap[0]) * 0.01;
-        if(last_out>=1.0){
-            attack_state = false;
+        if (last_out >= 1.0) {
+          attack_state = false;
         }
       } else {
         last_out *=  1.0 -  (1.0 - parameterMap[1]) * 0.001;
+
+        // Auto Trigger if TR not connected
+        if (portMap[PORT_AD_TR] == 0) {
+          if (last_out < 0.000001) {
+            attack_state = true;
+          }
+        }
+
+
       }
 
 
@@ -320,6 +329,37 @@ class zmModuleOut : public zmModule {
     };
 };
 
+/******************************************************/
+// here we try some "analog mocho sauce" :-) by selfmade vactrol
+// TODO: try use different Condensators via OpenCollector Output ?!?!?!
+// TODO: try prefilter PWM Out
+
+#define PORT_VACTROL_PW_LED 0   // it the LED via PW
+#define PORT_VACTROL_PW_IN  1   // its Audio RC hardware input via PW
+#define PORT_VACTROL_RETURN 2   // its from ADC
+
+#define PIN_VACTROL_LED  3
+#define PIN_VACTROL_IN   4
+
+class zmModuleVactrol : public zmModule {
+  public:
+
+    zmModuleVactrol() {
+      title = "Vactrol";
+      analogWriteResolution(12);
+      analogWriteFrequency(PIN_VACTROL_LED, 375000);  // FTM1
+      analogWriteFrequency(PIN_VACTROL_IN,  375000);
+      portName[PORT_VACTROL_PW_LED] = "Led";
+      portName[PORT_VACTROL_PW_IN]  = "input";
+      portName[PORT_VACTROL_RETURN] = "output";
+    }
+
+    void genSample(float * bus) {
+      analogWrite(PIN_VACTROL_LED, 2048.0 * (bus[portMap[PORT_VACTROL_PW_LED]]   + 1.0) )
+      analogWrite(PIN_VACTROL_IN, 2048.0 * (bus[portMap[PORT_VACTROL_PW_IN]]   + 1.0) )
+
+    };
+};
 
 
 
