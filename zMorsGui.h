@@ -115,6 +115,8 @@ class zMorsGui {
         display->print(lines[p].text);
         y += 8;
       }
+
+      // display->fillRect2(20, 20, 46, 24, YELLOW);
     };
 
     void updateLines() {
@@ -158,6 +160,14 @@ class zMorsGui {
           for (int p = 0 ; p < 10 ; p++) {
             if (m->portName[p].length() > 0) {
               lines[idx].color = BLUE;
+
+              while(m->portName[p].length() < 7){
+                m->portName[p].append(" ");
+              }
+              
+              
+              
+              
               if (m->portMap[p] == 0) {
                 lines[idx].text = " " + m->portName[p] + " --";
               } else {
@@ -171,7 +181,15 @@ class zMorsGui {
           for (int p = 0 ; p < 10 ; p++) {
             if (m->parameterName[p].length() > 0) {
               lines[idx].color = GREEN;
-              lines[idx].text = " " + m->parameterName[p] + " " +  m->parameterMap[p];
+
+
+
+              while(m->parameterName[p].length() < 7){
+                m->parameterName[p].append(" ");
+              }
+
+              
+              lines[idx].text = " " + m->parameterName[p] + " " + String( RANGE(0.01, m->parameterMap[p], 9.99) , 2).substring(0,4);    ;
               lines[idx].type = zMorsGuiLine::PARM;
               lines[idx].parmPtr = &m->parameterMap[p];
               idx++;

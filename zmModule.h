@@ -207,7 +207,7 @@ class zmModuleOsc : public zmModule {
       title = "OSC";
       portName[PORT_OSC_OUT_SAW] = "out saw";
       portName[PORT_OSC_OUT_SIN] = "out sin";
-      portName[PORT_OSC_OUT_SQR] = "out square";
+      portName[PORT_OSC_OUT_SQR] = "out sqr";
       portName[PORT_OSC_FRQ]     = "frq";
       portName[PORT_OSC_AMP]     = "amp";
       parameterName[0]           = "thea";

@@ -40,6 +40,15 @@ class zMorsEngine {
       mOut    = new zmModuleOut();
       mEnv1    = new zmModuleAD();
 
+      // wishlist
+      // 3. osc
+      // 2. env
+      // 2 offset/leveler
+      // trigger 8 x 4  gen (bin Muster as parm)
+
+
+
+
       mOsc1->title="Osc1";
       mOsc2->title="Osc2";
 

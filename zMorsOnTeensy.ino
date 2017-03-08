@@ -14,9 +14,12 @@ void update_encoder() {
   static long newPosition = 0;
   static long oldPosition = 0;
   newPosition = myEnc.read() * 0.25;
+  
   if (newPosition == oldPosition) {
     return;
   }
+  
+  
 
   if (digitalRead(35)) {  // Encoder gedreuckt ?
     if (newPosition > oldPosition ) {
@@ -37,7 +40,7 @@ void update_encoder() {
 }
 
 void renderAudio() {
-  audio.loop();
+    audio.loop();
 }
 
 void setup(void) {
@@ -49,5 +52,7 @@ void setup(void) {
 
 void loop() {
   update_encoder();
+  delayMicroseconds(400);
+
 }
 
