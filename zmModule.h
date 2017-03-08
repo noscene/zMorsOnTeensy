@@ -355,8 +355,8 @@ class zmModuleVactrol : public zmModule {
     }
 
     void genSample(float * bus) {
-      analogWrite(PIN_VACTROL_LED, 2048.0 * (bus[portMap[PORT_VACTROL_PW_LED]]   + 1.0) )
-      analogWrite(PIN_VACTROL_IN, 2048.0 * (bus[portMap[PORT_VACTROL_PW_IN]]   + 1.0) )
+      //analogWrite(PIN_VACTROL_LED, 2048.0 * (bus[portMap[PORT_VACTROL_PW_LED]]   + 1.0) )
+      //analogWrite(PIN_VACTROL_IN, 2048.0 * (bus[portMap[PORT_VACTROL_PW_IN]]   + 1.0) )
 
     };
 };

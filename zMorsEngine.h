@@ -172,16 +172,16 @@ class zMorsEngine {
 
 
     String patch2Json(){
-      
+      /*
       StaticJsonBuffer<200> jsonBuffer;
       
       JsonObject& root = jsonBuffer.createObject();
       root["version"] = 1.0;
       JsonArray& data = root.createNestedArray("modules");
-      data.add()
+      //data.add()
 
-      
-      
+      */
+      return String("");
     };
 
 
