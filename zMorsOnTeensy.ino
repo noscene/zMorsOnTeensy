@@ -52,7 +52,7 @@ void setup(void) {
 
 void loop() {
   update_encoder();
-  delayMicroseconds(400);
+  delayMicroseconds(100);
 
 }
 
