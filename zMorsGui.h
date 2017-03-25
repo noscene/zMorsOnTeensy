@@ -5,26 +5,20 @@
 #include "Arduino.h"
 #include "zMorsEngine.h"
 
-// You can use any (4 or) 5 pins
-#define sclk 13
-#define mosi 11
-#define cs   10
-#define rst  9
-#define dc   8
-
-// Color definitions
-#define BLACK           0x0000
-#define BLUE            0x001F
-#define RED             0xF800
-#define GREEN           0x07E0
-#define CYAN            0x07FF
-#define MAGENTA         0xF81F
-#define YELLOW          0xFFE0
-#define WHITE           0xFFFF
-
-#include <Adafruit_GFX.h>
-#include "Adafruit_SSD1331.h"
 #include <SPI.h>
+#include <SSD_13XX.h>
+
+
+
+// Now we using faster Display Lib from sumotoy, thanks for the great work!
+// SCL on Pin 13   TODO: check Pullup on Teensy
+// SDA on Pin 11   TODO: check Pullup on Teensy
+
+#define __CS1   10
+#define __DC  9
+#define __RST 14
+
+
 
 // little helper class for a single line
 class zMorsGuiLine {
@@ -86,17 +80,21 @@ class zMorsGui {
   private:
     int idx = 0;
     zMorsEngine * ae;
-    Adafruit_SSD1331 * display;
+    // Adafruit_SSD1331 * display;
+
+
+    SSD_13XX tft = SSD_13XX(__CS1, __DC,__RST);
+
   public:
     int topLine = 0;
     int maxLine = 0;
     zMorsGuiLine lines[160];
 
     zMorsGui() {
-      display =  new Adafruit_SSD1331(cs, dc, rst);
-      display->begin();
-      display->fillScreen(BLACK);
-    };
+      tft.begin();
+      tft.setBrightness(15);
+      tft.clearScreen();
+  };
 
     void init(zMorsEngine * e) {
       ae = e;
@@ -104,19 +102,31 @@ class zMorsGui {
       renderLines();
     };
 
+
+    void updateDetalBox() {
+      tft.fillRect(20, 20, 56, 34, BLACK);
+      tft.setTextColor(WHITE);
+      tft.setCursor(20,20);
+      tft.setTextScale(2);
+      float v = *lines[topLine].parmPtr;
+      tft.print(v);
+    };
+    
+    
+    
     void renderLines() {
-      display->fillRect2(0, 0, 128, 64, BLACK);
-      display->setTextColor(WHITE);
+      tft.clearScreen();
+      tft.setTextColor(WHITE);
+      tft.setTextScale(1);
       topLine = RANGE(0, topLine, maxLine);
       int y = 0;
       for (int p = topLine ; p < topLine + 7 ; p++) {
-        display->setCursor(0, y);
-        display->setTextColor(lines[p].color);
-        display->print(lines[p].text);
+        tft.setCursor(0, y);
+        tft.setTextColor(lines[p].color);
+        tft.print(lines[p].text);
         y += 8;
       }
 
-      // display->fillRect2(20, 20, 46, 24, YELLOW);
     };
 
     void updateLines() {

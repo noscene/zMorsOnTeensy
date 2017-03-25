@@ -9,17 +9,28 @@
 zMorsGui  gui = zMorsGui();
 zMorsEngine  audio = zMorsEngine();
 Encoder myEnc(33, 34);
+static bool needUpdateScreen = false;
+static bool oldKnobState = 0;
 
 void update_encoder() {
   static long newPosition = 0;
   static long oldPosition = 0;
+
+
+
   newPosition = myEnc.read() * 0.25;
-  
+
+
+  if (oldKnobState != digitalRead(35)) {
+    oldKnobState = digitalRead(35);
+    needUpdateScreen = true;
+  }
+
   if (newPosition == oldPosition) {
     return;
   }
-  
-  
+
+  needUpdateScreen = true;
 
   if (digitalRead(35)) {  // Encoder gedreuckt ?
     if (newPosition > oldPosition ) {
@@ -35,12 +46,10 @@ void update_encoder() {
     }
   }
   oldPosition = newPosition;
-  gui.renderLines();
-  gui.updateLines();
 }
 
 void renderAudio() {
-    audio.loop();
+  audio.loop();
 }
 
 void setup(void) {
@@ -53,6 +62,20 @@ void setup(void) {
 void loop() {
   update_encoder();
   delayMicroseconds(100);
+
+
+  if (needUpdateScreen) {
+    needUpdateScreen = false;
+    gui.renderLines();
+    gui.updateLines();
+    if (!oldKnobState) {
+      gui.updateDetalBox();
+
+    }
+    delayMicroseconds(10000);
+
+  }
+
 
 }
 

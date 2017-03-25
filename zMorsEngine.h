@@ -152,11 +152,10 @@ class zMorsEngine {
     };
 
     void patch4() {
-      // FM Tester
-      
+      // FM Kick
       mOsc1->portMap[PORT_OSC_OUT_SIN]    = mOut->portMap[PORT_OUT_L] = 1;
       mOsc2->portMap[PORT_OSC_OUT_SIN]    = mOsc1->portMap[PORT_OSC_FRQ] = 2;
-//      mEnv1->portMap[PORT_AD_OUT]         = mOsc1->portMap[PORT_OSC_FRQ] = mOsc1->portMap[PORT_OSC_AMP] = 4;
+      mEnv1->portMap[PORT_AD_OUT]         = mOsc2->portMap[PORT_OSC_AMP] = 3;
 
       // Connect AD env and set osc amp to 0 (add by env)
       mSeq->portMap[PORT_SEQ_OUT]  =0;
@@ -184,11 +183,6 @@ class zMorsEngine {
       return String("");
     };
 
-
-
-
-
-    
     // Render all Modules
     void loop() {
       for (int i = 0 ; i < 10 ; i ++) {

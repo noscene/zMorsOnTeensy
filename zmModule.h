@@ -128,8 +128,9 @@ class zmModuleAD : public zmModule {
 
         // Auto Trigger if TR not connected
         if (portMap[PORT_AD_TR] == 0) {
-          if (last_out < 0.000001) {
+          if (last_out < 0.0001) {
             attack_state = true;
+            last_out = 0.0001;
           }
         }
 
