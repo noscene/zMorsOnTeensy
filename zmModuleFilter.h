@@ -1,4 +1,3 @@
-
 #ifndef zMorsModuleFilter_h
 #define zMorsModuleFilter_h
 

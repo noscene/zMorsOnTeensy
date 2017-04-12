@@ -10,6 +10,12 @@
 #include "zmModuleFilter.h"
 #include "zmModuleVCA.h"
 #include "zmModuleMIX.h"
+#include "zmModuleAD.h"
+#include "zmModuleNoise.h"
+#include "zmModuleOsc.h"
+#include "zmModuleSeq.h"
+#include "zmModuleIn.h"
+#include "zmModuleOut.h"
 
 class zMorsEngine {
 
@@ -68,6 +74,7 @@ class zMorsEngine {
 
       resetModules();
       patch4();
+      mOut->portMap[PORT_OUT_R] = mOut->portMap[PORT_OUT_L];
     };
 
     void resetModules(){
@@ -81,7 +88,7 @@ class zMorsEngine {
 
       // Patch CV Sequencer
       mOsc1->portMap[PORT_OSC_OUT_SAW]    = mFilter->portMap[PORT_FILTER_IN] = 1;
-      mFilter->portMap[PORT_FILTER_OUT]   = mOut->portMap[PORT_OUT_L] = 2;
+      mFilter->portMap[PORT_FILTER_OUT]   = mOut->portMap[PORT_OUT_L] = mOut->portMap[PORT_OUT_R] = 2;
       mOsc2->portMap[PORT_OSC_OUT_SQR]    = mSeq->portMap[PORT_SEQ_CLK] =  mEnv1 ->portMap[PORT_AD_TR] = 3;
       mSeq->portMap[PORT_SEQ_OUT]         = mFilter->portMap[PORT_FILTER_FRQ] = 4;
 
@@ -109,7 +116,7 @@ class zMorsEngine {
       // HiHats Seq
       // Patch CV Sequencer
       mNoise->portMap[PORT_NOISE_OUT]    = mFilter->portMap[PORT_FILTER_IN] = 1;
-      mFilter->portMap[PORT_FILTER_OUT]   = mOut->portMap[PORT_OUT_L] = 2;
+      mFilter->portMap[PORT_FILTER_OUT]   = mOut->portMap[PORT_OUT_L] = mOut->portMap[PORT_OUT_R] = 2;
       mOsc2->portMap[PORT_OSC_OUT_SQR]    = mSeq->portMap[PORT_SEQ_CLK] =  mEnv1 ->portMap[PORT_AD_TR] = 3;
       mSeq->portMap[PORT_SEQ_OUT]         = mFilter->portMap[PORT_FILTER_FRQ] = 4;
 
@@ -136,7 +143,7 @@ class zMorsEngine {
       // HiHats Seq
       // Patch CV Sequencer
       // Patch CV Sequencer
-      mOsc1->portMap[PORT_OSC_OUT_SIN]    = mOut->portMap[PORT_OUT_L] = 1;
+      mOsc1->portMap[PORT_OSC_OUT_SIN]    = mOut->portMap[PORT_OUT_L] = mOut->portMap[PORT_OUT_R] = 1;
       mOsc2->portMap[PORT_OSC_OUT_SQR]    = mSeq->portMap[PORT_SEQ_CLK] =  mEnv1 ->portMap[PORT_AD_TR] = 3;
       mEnv1->portMap[PORT_AD_OUT]         = mOsc1->portMap[PORT_OSC_FRQ] = mOsc1->portMap[PORT_OSC_AMP] = 4;
 
@@ -153,7 +160,7 @@ class zMorsEngine {
 
     void patch4() {
       // FM Kick
-      mOsc1->portMap[PORT_OSC_OUT_SIN]    = mOut->portMap[PORT_OUT_L] = 1;
+      mOsc1->portMap[PORT_OSC_OUT_SIN]    = mOut->portMap[PORT_OUT_L] = mOut->portMap[PORT_OUT_R] = 1;
       mOsc2->portMap[PORT_OSC_OUT_SIN]    = mOsc1->portMap[PORT_OSC_FRQ] = 2;
       mEnv1->portMap[PORT_AD_OUT]         = mOsc2->portMap[PORT_OSC_AMP] = 3;
 
